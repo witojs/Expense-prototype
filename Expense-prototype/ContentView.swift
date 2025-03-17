@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 
+//structur data dari rincian item expense
 struct ExpenseItem: Identifiable, Codable{
     var id = UUID()
     let title: String
@@ -23,6 +24,7 @@ struct CategoryTotal{
     let total: Double
 }
 
+//observable class memungkinkan class digunakan sebagai state, didSet & init untuk menyimpan data ke UserDefaults secara otomatis
 @Observable class Expenses {
     var items = [ExpenseItem](){
         didSet{
@@ -49,9 +51,11 @@ struct CategoryTotal{
 //Todo 4: Jika user belum input biaya, munculkan Keterangan
 //todo 5: User bisa ascending / descending report daily nya
 //todo 6: Buat Categori untuk memfasilitasi user jika tidak ada biaya harian
+//todo 7: fitur streak jika user belum input untuk hari baru, otomatis jadi 0 dan baru berubah jika user menginput daily expense
 struct ContentView: View {
     @State private var expenses = Expenses()
     @State private var showingAddExpense = false
+    
     //untuk fitur streak
     @State private var currentStreak = 0
     
@@ -117,7 +121,7 @@ struct ContentView: View {
                                 Text(category)
                                     .font(.headline)
                                 Spacer()
-                                NavigationLink(destination: DetailView(category: category, expenses: groupedExpenses[category]!.items, onDelete: deleteItem)){
+                                NavigationLink(destination: DetailView(category: category, expenses: groupedExpenses[category]!.items, onDelete: deleteItem, onUpdate: updateItem)){
                                     Text("Total: \(Decimal(groupedExpenses[category]!.total), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
                                 }
                             }
@@ -228,34 +232,6 @@ struct ContentView: View {
         items: [Expense_prototype.ExpenseItem(id: 1032A107-04CD-42FE-8206-B390C99173B4, title: "Entertain", category: "Business", amount: 500000.0, date: 2025-03-14 15:19:14 +0000, note: Optional("Karaoke"))]
      )
  ]
- */
-
-/*
- Calculate Streak:
- func calculateStreak(from items: [ExpenseItem]) -> Int {
-     let today = Calendar.current.startOfDay(for: Date())
-     var currentStreak = 0
-     var lastInputDate: Date?
-
-     // Sort items by date
-     let sortedItems = items.sorted { $0.date < $1.date }
-
-     for item in sortedItems {
-         let inputDate = Calendar.current.startOfDay(for: item.date)
-
-         if inputDate == today {
-             currentStreak += 1
-             lastInputDate = inputDate
-         } else if let lastDate = lastInputDate, Calendar.current.isDate(inputDate, inSameDayAs: lastDate.addingTimeInterval(-86400)) {
-             currentStreak += 1
-             lastInputDate = inputDate
-         } else if lastInputDate == nil || !Calendar.current.isDate(inputDate, inSameDayAs: lastInputDate!) {
-             break // Streak is broken
-         }
-     }
-
-     return currentStreak
- }
  */
 
 /*

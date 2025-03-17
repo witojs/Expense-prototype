@@ -60,6 +60,7 @@ struct AddView: View {
         }
     }
     
+    //set least date to input expense, in this case 2 days before today
     private var yesterday: Date{
         Calendar.current.date(byAdding: .day, value: -2, to: Date()) ?? Date()
     }
@@ -70,6 +71,7 @@ struct AddView: View {
         return calendar.date(from: components)!
     }
     
+    //setting color for max char
     private var characterColor: Color{
         let remaining = 50 - note.count
         if remaining < 5 {
