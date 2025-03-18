@@ -64,7 +64,7 @@ struct ContentView: View {
         CategoryTotal(category: "Business", total: 3.5),
         CategoryTotal(category: "Travel", total: 2.5),
     ]
-
+    
     var body: some View {
         NavigationStack{
             VStack {
@@ -111,21 +111,21 @@ struct ContentView: View {
             VStack(alignment: .leading) {
                 Text("Your Streak is \(currentStreak)")
                     .padding()
-                Text("Here's What you spent:")
+                Text("Here are What you spent:")
                     .font(.headline)
                     .padding(.leading)
                 List{
                     ForEach(groupedExpenses.keys.sorted(by: { groupedExpenses[$0]!.total > groupedExpenses[$1]!.total }), id: \.self){ category in
-//                        Section{
-                            HStack {
-                                Text(category)
-                                    .font(.headline)
-                                Spacer()
-                                NavigationLink(destination: DetailView(category: category, expenses: groupedExpenses[category]!.items, onDelete: deleteItem, onUpdate: updateItem)){
-                                    Text("Total: \(Decimal(groupedExpenses[category]!.total), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
-                                }
+                        //                        Section{
+                        HStack {
+                            Text(category)
+                                .font(.headline)
+                            Spacer()
+                            NavigationLink(destination: DetailView(category: category, expenses: groupedExpenses[category]!.items, onDelete: deleteItem, onUpdate: updateItem)){
+                                Text("Total: \(Decimal(groupedExpenses[category]!.total), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
                             }
-//                        }
+                        }
+                        //                        }
                     }
                 }
             }
@@ -145,18 +145,18 @@ struct ContentView: View {
             }
         }
     }
-
+    
     // Group expenses by category and calculate total amounts
     private var groupedExpenses: [String: (total: Double, items: [ExpenseItem])] {
         var grouped: [String: (total: Double, items: [ExpenseItem])] = [:]
         
         for expense in expenses.items {
-                if grouped[expense.category] == nil {
-                    grouped[expense.category] = (total: 0.0, items: [])
-                }
-                grouped[expense.category]!.total += expense.amount
-                grouped[expense.category]!.items.append(expense)
+            if grouped[expense.category] == nil {
+                grouped[expense.category] = (total: 0.0, items: [])
             }
+            grouped[expense.category]!.total += expense.amount
+            grouped[expense.category]!.items.append(expense)
+        }
         return grouped
     }
     
@@ -191,7 +191,7 @@ struct ContentView: View {
     private func calculateStreak(from items: [ExpenseItem]) -> Int {
         let today = Calendar.current.startOfDay(for: Date()) // Normalize today to the start of the day
         var currentStreak = 0
-
+        
         // Sort items by date
         let sortedItems = items.sorted { $0.date < $1.date }
         
@@ -201,7 +201,7 @@ struct ContentView: View {
             let inputDate = Calendar.current.startOfDay(for: item.date)
             dateSet.insert(inputDate)
         }
-
+        
         // Start checking from today and go backwards
         var dateToCheck = today
         while dateSet.contains(dateToCheck) {
@@ -223,14 +223,14 @@ struct ContentView: View {
 /* groupedExpense Data
  [
  "Personal": (total: 20238000.0,
-    items: [Expense_prototype.ExpenseItem(id: 75FDE79E-D7F8-4C23-842D-F7D3938C5679, title: "Belanja pagi", category: "Personal", amount: 200000.0, date: 2025-03-14 15:18:32 +0000, note: Optional("Beli Galon standford")), Expense_prototype.ExpenseItem(id: D468CFD4-E84A-4E66-84D1-0B8EE0E63835, title: "Makan", category: "Personal", amount: 15000.0, date: 2025-03-14 15:21:38 +0000, note: Optional("")), Expense_prototype.ExpenseItem(id: 6703AC10-228D-4E2B-8CA9-4DEAC5D2C86C, title: "Sewa Gudang", category: "Personal", amount: 5000000.0, date: 2025-03-13 15:42:00 +0000, note: Optional("Sewa gudang 2025")), Expense_prototype.ExpenseItem(id: 4DD765BE-BB3E-43FE-91B6-B36CA0342568, title: "Beli iPhone", category: "Personal", amount: 15000000.0, date: 2025-03-14 17:00:00 +0000, note: Optional("iPhone 16")), Expense_prototype.ExpenseItem(id: F5D4CCFB-DB18-4A24-9E58-7FC57A992876, title: "Beli chicki", category: "Personal", amount: 15000.0, date: 2025-03-14 17:00:00 +0000, note: Optional("")), Expense_prototype.ExpenseItem(id: CA580AD6-53F2-443B-926B-6134991143CC, title: "Beli pocari", category: "Personal", amount: 8000.0, date: 2025-03-14 17:00:00 +0000, note: Optional(""))]
-    ),
-     "Travel": (total: 9164000.0,
-        items: [Expense_prototype.ExpenseItem(id: B49349E6-462A-4DF4-9D23-33F943A7A840, title: "Beli tiket pesawat", category: "Travel", amount: 1200000.0, date: 2025-03-14 15:35:08 +0000, note: Optional("Ke Batam")), Expense_prototype.ExpenseItem(id: E0BABD36-C9AA-47BD-A63E-EEC5B5F676DE, title: "Tiket pesawat", category: "Travel", amount: 7000000.0, date: 2025-03-12 15:45:16 +0000, note: Optional("")), Expense_prototype.ExpenseItem(id: 8D199568-EFF9-4903-AEE2-72AE143299A9, title: "Nonton bioskop", category: "Travel", amount: 65000.0, date: 2025-03-14 17:00:00 +0000, note: Optional("XXI MB2")), Expense_prototype.ExpenseItem(id: 407D912F-157D-4ADC-A12D-C297DAAD439B, title: "Beli tiket ke Singapore", category: "Travel", amount: 899000.0, date: 2025-03-14 17:00:00 +0000, note: Optional(""))]
-     ),
-     "Business": (total: 500000.0,
-        items: [Expense_prototype.ExpenseItem(id: 1032A107-04CD-42FE-8206-B390C99173B4, title: "Entertain", category: "Business", amount: 500000.0, date: 2025-03-14 15:19:14 +0000, note: Optional("Karaoke"))]
-     )
+ items: [Expense_prototype.ExpenseItem(id: 75FDE79E-D7F8-4C23-842D-F7D3938C5679, title: "Belanja pagi", category: "Personal", amount: 200000.0, date: 2025-03-14 15:18:32 +0000, note: Optional("Beli Galon standford")), Expense_prototype.ExpenseItem(id: D468CFD4-E84A-4E66-84D1-0B8EE0E63835, title: "Makan", category: "Personal", amount: 15000.0, date: 2025-03-14 15:21:38 +0000, note: Optional("")), Expense_prototype.ExpenseItem(id: 6703AC10-228D-4E2B-8CA9-4DEAC5D2C86C, title: "Sewa Gudang", category: "Personal", amount: 5000000.0, date: 2025-03-13 15:42:00 +0000, note: Optional("Sewa gudang 2025")), Expense_prototype.ExpenseItem(id: 4DD765BE-BB3E-43FE-91B6-B36CA0342568, title: "Beli iPhone", category: "Personal", amount: 15000000.0, date: 2025-03-14 17:00:00 +0000, note: Optional("iPhone 16")), Expense_prototype.ExpenseItem(id: F5D4CCFB-DB18-4A24-9E58-7FC57A992876, title: "Beli chicki", category: "Personal", amount: 15000.0, date: 2025-03-14 17:00:00 +0000, note: Optional("")), Expense_prototype.ExpenseItem(id: CA580AD6-53F2-443B-926B-6134991143CC, title: "Beli pocari", category: "Personal", amount: 8000.0, date: 2025-03-14 17:00:00 +0000, note: Optional(""))]
+ ),
+ "Travel": (total: 9164000.0,
+ items: [Expense_prototype.ExpenseItem(id: B49349E6-462A-4DF4-9D23-33F943A7A840, title: "Beli tiket pesawat", category: "Travel", amount: 1200000.0, date: 2025-03-14 15:35:08 +0000, note: Optional("Ke Batam")), Expense_prototype.ExpenseItem(id: E0BABD36-C9AA-47BD-A63E-EEC5B5F676DE, title: "Tiket pesawat", category: "Travel", amount: 7000000.0, date: 2025-03-12 15:45:16 +0000, note: Optional("")), Expense_prototype.ExpenseItem(id: 8D199568-EFF9-4903-AEE2-72AE143299A9, title: "Nonton bioskop", category: "Travel", amount: 65000.0, date: 2025-03-14 17:00:00 +0000, note: Optional("XXI MB2")), Expense_prototype.ExpenseItem(id: 407D912F-157D-4ADC-A12D-C297DAAD439B, title: "Beli tiket ke Singapore", category: "Travel", amount: 899000.0, date: 2025-03-14 17:00:00 +0000, note: Optional(""))]
+ ),
+ "Business": (total: 500000.0,
+ items: [Expense_prototype.ExpenseItem(id: 1032A107-04CD-42FE-8206-B390C99173B4, title: "Entertain", category: "Business", amount: 500000.0, date: 2025-03-14 15:19:14 +0000, note: Optional("Karaoke"))]
+ )
  ]
  */
 

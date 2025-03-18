@@ -56,11 +56,11 @@ struct EditView: View {
                         "Note - opsional",
                         text: noteBinding
                     )
-                        .onChange(of: note){
-                            if noteBinding.wrappedValue.count > 50{
-                                note = String(note!.prefix(50))
-                            }
+                    .onChange(of: note){
+                        if noteBinding.wrappedValue.count > 50{
+                            note = String(note!.prefix(50))
                         }
+                    }
                     
                     HStack {
                         Spacer()
